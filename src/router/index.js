@@ -3,8 +3,8 @@ import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
-import ProductsView from '../views/ProductsView.vue'
-// import SearchView from '../views/SearchView.vue'
+import SearchProductsView from '../views/SearchProductsView.vue'
+import CartView from '../views/CartView.vue'
 
 const routes = [
   {
@@ -28,8 +28,12 @@ const routes = [
     component: RegisterView
   },
   {
-    path: "/products",
-    component: ProductsView,
+    path: "/search-products",
+    component: SearchProductsView,
+  },
+  {
+    path: "/cart",
+    component: CartView,
   },
   {
     path: "/:catchAll(.*)",

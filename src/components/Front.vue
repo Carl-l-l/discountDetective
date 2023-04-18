@@ -12,14 +12,22 @@
         </div>
 
         <h1 class="display-4">Discount Detective</h1>
-        <p class="lead">
+        <h5 class="lead mt-4">
           Find the best deals on the internet
-        </p>
+        </h5>
         <p class="lead">
-          <a href="#" class="btn btn-dark btn-lg">Learn more</a>
+          <a @click="$router.push('about')" class="btn btn-dark btn-lg">Learn more</a>
         </p>
+
+        <h5 class="lead mt-5">Register as a user</h5>
+        <div class="d-flex">
+        <button @click="$router.push('login')" id="loginBtn" class="btn btn-dark btn-lg mr-4">Login</button>
+        <button @click="$router.push('register')" class="btn btn-dark btn-lg ml-5">Register</button>
+        </div>
+
+
       </div>
-      <div class="col-lg-6">
+      <div class="col-lg-2 mt-5">
         <img class="img-fluid" src="../assets/discount.png" alt="Discount Detective" />
       </div>
     </div>
@@ -43,6 +51,10 @@ export default {
 
 .btn-search:hover {
   background-color: #ced4da;
+}
+
+#loginBtn {
+  margin-right: 10px;
 }
 
 </style>

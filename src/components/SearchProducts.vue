@@ -2,7 +2,7 @@
   <div class="container mt-5">
     <div class="input-group mb-3">
       <input type="text" class="form-control" placeholder="Search for product" aria-label="Search for product"
-        aria-describedby="button-addon2" v-model="searchStr">
+        aria-describedby="button-addon2">
       <div class="input-group-append">
         <button class="btn btn-search" type="button" id="button-addon2">🔍</button>
       </div>
@@ -29,24 +29,11 @@ export default {
   components: {},
   data() {
     return {
-      searchStr: '',
       products: [
         { name: 'Oksekød', price: 40 }, { name: 'Banan', price: 5 }
       ]
     };
   },
-  watch: {
-    searchStr() {
-      console.log(this.searchStr);
-    }
-  },
-  methods: {
-    filterProducts(event) {
-      console.log(event.target.value);
-
-      
-    }
-  }
 };
 </script>
 

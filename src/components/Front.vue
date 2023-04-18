@@ -3,7 +3,15 @@
 
 
     <div class="row mt-5">
-      <div class="col-lg-6">
+      <div class="col-lg-6 text-center">
+
+        <h1 class="display-4">Discount Detective</h1>
+        <h5 class="lead mt-4">
+          Find the best deals on the internet
+        </h5>
+        <p class="lead">
+          <a @click="$router.push('about')" class="btn btn-dark btn-sm">Learn more</a>
+        </p>
         <div class="input-group mb-3">
           <input type="text" class="form-control" placeholder="Search for product" aria-label="Search for product" aria-describedby="button-addon2">
           <div class="input-group-append">
@@ -11,24 +19,16 @@
           </div>
         </div>
 
-        <h1 class="display-4">Discount Detective</h1>
-        <h5 class="lead mt-4">
-          Find the best deals on the internet
-        </h5>
-        <p class="lead">
-          <a @click="$router.push('about')" class="btn btn-dark btn-lg">Learn more</a>
-        </p>
-
         <h5 class="lead mt-5">Register as a user</h5>
-        <div class="d-flex">
-        <button @click="$router.push('login')" id="loginBtn" class="btn btn-dark btn-lg mr-4">Login</button>
-        <button @click="$router.push('register')" class="btn btn-dark btn-lg ml-5">Register</button>
+        <div class="d-flex justify-content-center">
+          <button @click="$router.push('login')" id="loginBtn" class="btn btn-dark btn-lg mr-4">Login</button>
+          <button @click="$router.push('register')" class="btn btn-dark btn-lg ml-5">Register</button>
         </div>
 
 
       </div>
-      <div class="col-lg-2 mt-5">
-        <img class="img-fluid" src="../assets/discount.png" alt="Discount Detective" />
+      <div class="col-lg-2 mt-5 ml-5 text-center">
+        <img class="img-fluid" src="../assets/discount.png" alt="Discount Detective" width="200" />
       </div>
     </div>
   </div>

@@ -1,4 +1,4 @@
-# parking-app
+# discount-detective-app
 
 ## Project setup
 ```

@@ -3,7 +3,7 @@
         <h1 class="display-5">Kurv:</h1>
         <div class="card">
             <ul class="list-group">
-                <li class="list-group-item flex-column flex-lg-row align-items-center" v-for="(product, index) in products"
+                <li class="list-group-item flex-column flex-lg-row" v-for="(product, index) in products"
                     :key="index">
                     <div class="card-img">
                         <img src="https://picsum.photos/300/300" class="img-fluid" alt="product image">

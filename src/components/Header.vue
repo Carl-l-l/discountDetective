@@ -56,7 +56,6 @@ export default {
     height: 100vh;
     width: 240px;
     font-size: 24px;
-    padding-top: 55px;
     top: 0;
     right: 0;
     padding-left: 15px;

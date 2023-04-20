@@ -44,6 +44,13 @@
       </div>
     </div>
   </div>
+  
+  <!-- Pop-up on addToCart -->
+  <div class="alert alert-success hide" role="alert">
+    Added to cart!
+  </div>
+
+
 </template>
 
 <script>
@@ -54,7 +61,7 @@ export default {
     return {
       searchStr: '',
       products: [
-        { name: 'Oksekød', price: 40, quantity: 0, stores: [{name: "Lidl", price: 40}, {name: "Netto", price: 35}, {name: "Rema 1000", price: 30}] }, { name: 'Banan', quantity: 0, stores: [{name: "Lidl", price: 5}, {name: "Netto", price: 4}, {name: "Rema 1000", price: 3}] }
+        { name: 'Oksekød', price: 40, quantity: 0, stores: [{name: "Lidl", price: 40}, {name: "Netto", price: 35}, {name: "Rema 1000", price: 30}] }, { name: 'Banan', quantity: 0, stores: [{name: "Lidl", price: 5}, {name: "Netto", price: 4}, {name: "Rema 1000", price: 6}] }
       ]
     };
   },
@@ -89,7 +96,7 @@ export default {
         this.search(newVal);
       } else {
         this.products = [
-          { name: 'Oksekød', price: 40, quantity: 0, stores: [{name: "Lidl", price: 40}, {name: "Netto", price: 35}, {name: "Rema 1000", price: 30}] }, { name: 'Banan', quantity: 0, stores: [{name: "Lidl", price: 5}, {name: "Netto", price: 4}, {name: "Rema 1000", price: 3}] }
+          { name: 'Oksekød', price: 40, quantity: 0, stores: [{name: "Lidl", price: 40}, {name: "Netto", price: 35}, {name: "Rema 1000", price: 30}] }, { name: 'Banan', quantity: 0, stores: [{name: "Lidl", price: 5}, {name: "Netto", price: 4}, {name: "Rema 1000", price: 6}] }
         ];
       }
 
@@ -101,6 +108,29 @@ export default {
 </script>
 
 <style scoped>
+    .hide {
+      -webkit-transform: scale(0%);
+    }
+    .alert-success {
+      min-width: 350px;
+      width: 75%;
+      position: fixed;
+      bottom: 0;
+      right: 20px;
+      /* transition: 2s ease-in; */
+      animation:moveOpen 5s;
+    }
+
+    /* Alert animation */
+  @keyframes moveOpen 
+	{
+  from {-webkit-transform: scale(0%);}
+  10% {-webkit-transform: scale(100%);}
+  50% {-webkit-transform: scale(100%);}
+  90% {-webkit-transform: scale(100%);}
+  to {-webkit-transform: scale(0%);}
+}
+
 .store {
   display: flex;
   justify-content: space-between;

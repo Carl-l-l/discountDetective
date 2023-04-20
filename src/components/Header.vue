@@ -18,11 +18,12 @@
               <router-link class="nav-item nav-link text-white" to="/about"><span>ABOUT US</span></router-link>
               <!-- <router-link class="nav-item nav-link text-white" to="/profile"><span>PROFILE</span></router-link> -->
               <router-link class="nav-item nav-link text-white" to="/search-products"><span>SEARCH</span></router-link>
-              <router-link class="nav-item nav-link text-white" to="/cart"><span>CART</span> 
+              <router-link v-if="this.$store.state.user.hasOwnProperty('userId')" class="nav-item nav-link text-white" to="/cart"><span>CART</span> 
               </router-link>
               <router-link v-if="!this.$store.state.user.hasOwnProperty('userId')"
                 class="nav-item nav-link text-white d-none d-lg-block" to="/login"><span>LOGIN</span></router-link>
-              <a v-if="this.$store.state.user.hasOwnProperty('userId')" @click="this.logOut"
+                <!-- Call the logOut function -->
+              <a v-if="this.$store.state.user.hasOwnProperty('userId')" @click="this.logOut()"
             class="nav-item nav-link text-white"><span>LOG OUT</span></a>
         </div>
       </div>
@@ -34,7 +35,12 @@
 export default {
   name: 'HeaderFront',
   methods: {
-    
+    logOut() {
+      this.$store.dispatch("logOut");
+      // Remove local storage
+      localStorage.removeItem("userInfo");
+      this.$router.push("/login");
+    }
   },
   mounted() {
 

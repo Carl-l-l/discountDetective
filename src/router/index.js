@@ -5,6 +5,15 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import SearchProductsView from '../views/SearchProductsView.vue'
 import CartView from '../views/CartView.vue'
+import store from '../store/index.js'
+
+function isLoggedIn() {
+  if(!Object.keys(store.state.user).length == 0){
+    return true
+  }else{
+    return '/'
+  }
+}
 
 const routes = [
   {
@@ -20,12 +29,26 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: LoginView
+    component: LoginView,
+    beforeEnter: (to, from, next) => {
+      if(!Object.keys(store.state.user).length == 0){
+        next('/')
+      }else{
+        next()
+      }
+    }
   },
   {
     path: '/register',
     name: 'registers',
-    component: RegisterView
+    component: RegisterView,
+    beforeEnter: (to, from, next) => {
+      if(!Object.keys(store.state.user).length == 0){
+        next('/')
+      }else{
+        next()
+      }
+    }
   },
   {
     path: "/search-products",
@@ -34,6 +57,7 @@ const routes = [
   {
     path: "/cart",
     component: CartView,
+    beforeEnter: [isLoggedIn]
   },
   {
     path: "/:catchAll(.*)",

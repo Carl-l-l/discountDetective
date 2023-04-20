@@ -33,7 +33,8 @@
                 </div>
 
             </div>
-            <button class="ms-lg-0 ms-5 mt-3 float-end btn-transparent btn btn-dark btn-add">+</button>
+            <!-- Add to cart button -->
+            <button class="ms-lg-0 ms-5 mt-3 float-end btn-transparent btn btn-dark btn-add" @click="this.addToCart(product)">+</button>
           </div>
         </li>
       </ul>
@@ -64,6 +65,11 @@ export default {
       this.products = this.products.filter(product => {
         return product.name.toLowerCase().includes(productFilter.toLowerCase());
       });
+    },
+    // add to cart
+    addToCart(product) {
+      this.$store.dispatch("addToCart", product);
+      console.log('add to cart', product);
     }
   },
   watch: {

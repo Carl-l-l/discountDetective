@@ -17,27 +17,18 @@ import router from "../router"
 export default new Vuex.Store({
   state: {
     searching: false,
-    carInfo: {},
     admin: {},
-    api: "https://parking-project-api.azurewebsites.net/api",
+    api: "",
     user: {},
-    time: {
-      hours: 0,
-      minutes: 0
-    },
-    secret: "Th1s1s4S3cr3t"
+    secret: "Th1s1s4S3cr3t",
+    cart: []
   },
   getters: {
-    getCarInfo: (state) => state.carInfo,
     getAdminInfo: (state) => state.admin,
     getUserInfo: (state) => state.user,
-    getParkingTime: (state) => state.time,
-    getParkingTimeMinutes: (state) => state.time.hours * 60 + state.time.minutes
+    getCartInfo: (state) => state.cart,
   },
   mutations: {
-    SET_CAR(state, carInfo) {
-      state.carInfo = carInfo
-    },
     SET_ADMIN_INFO(state, payload) {
       state.admin[payload.key] = payload.data
     },
@@ -55,8 +46,8 @@ export default new Vuex.Store({
     SET_SEARCHING(state, searching) {
       state.searching = searching
     },
-    SET_PARKING_TIME(state, time) {
-      state.time = time
+    SET_CART(state, cart) {
+      state.cart = cart
     }
   },
   actions: {
@@ -66,65 +57,25 @@ export default new Vuex.Store({
         this.commit('SET_USER_INFO', userInfo)
       }
     },
-    async licensePlateLookup(state, licensePlate) {
-      // Call Python backend to get car info from NummerpladeAPI.dk
-
-      try {
-        this.commit('SET_SEARCHING', true) // Set searching to true
-        await axios.get(this.state.api + "/licenseplateLookup/", { params: {token: this.state.user.token, userId: this.state.user.userId, licenseplate: licensePlate}})
-          .then((response) => {
-            this.commit('SET_CAR', response.data) // Set car in state
-          })
-          .catch((error) => {
-            console.warn(error)
-          })
-          
-        this.commit('SET_SEARCHING', false) // Set searching to false
-
-      } catch (error) {
-        console.warn('licensePlateLookup: ' + error)
-      }
-    },
-    async detectLicensePlate(state, image) {
-      let formData = new FormData();
-      formData.append('file', image);
-      let result = '';
-
-      try {
-        this.commit('SET_SEARCHING', true) // Set searching to true
-        await axios.post(this.state.api + "/detectLicenseplate/", formData, { headers: { 'Content-Type': 'multipart/form-data' }})
-          .then((response) => {
-            this.commit('SET_SEARCHING', false) // Set searching to false
-            result = response.data.licenseplate;
-          })
-          .catch((error) => {
-            console.warn(error)
-          })
-
-        this.commit('SET_SEARCHING', false) // Set searching to false
-        return result;
-          
-
-      } catch (error) {
-        console.warn('licensePlateLookup: ' + error)
-      }
-    },
-    async loginUser(state, payload) {
+    async loginUser(){
       this.commit('SET_SEARCHING', true)
-      await axios
-        .get(this.state.api + "/login/", payload)
-        .then((response) => {
-          this.commit("SET_USER_INFO", response.data);
-          router.push('/')
-        })
-        .catch((error) => {
-          console.warn("login", error);
-          alert('Wrong email or password')
-        });
+      // console.log("loginUser", payload)
+      this.commit('SET_USER_INFO',  {token: 'test', userId: 'test'} )
+      router.push('/')
+
+      // await axios
+      //   .get(this.state.api + "/login/", payload)
+      //   .then((response) => {
+      //     this.commit("SET_USER_INFO", response.data);
+      //     router.push('/')
+      //   })
+      //   .catch((error) => {
+      //     console.warn("login", error);
+      //     alert('Wrong email or password')
+      //   });
 
       this.commit('SET_SEARCHING', false)
     },
-
     async callAPI(state, payload) {
       const method = payload.method;
       const endpoint = payload.endpoint;
@@ -185,40 +136,26 @@ export default new Vuex.Store({
       this.commit('SET_SEARCHING', false)
       return result;
     },
-    async getCars() {
-      await axios.get(this.state.api + "/regLicenseplates/", { params: {token: this.state.user.token, userId: this.state.user.userId } })
-        .then((response) => {
-          this.commit('SET_ADMIN_INFO', { "data": response.data, "key": 'cars' })
-          return response.data
-        }).catch((error) => {
-          console.log(error);
-        })
-
-    },
-    async getAreas() {
-      await axios.get(this.state.api + "/areas/", { params: {token: this.state.user.token, userId: this.state.user.userId } })
-        .then((response) => {
-          this.commit('SET_ADMIN_INFO', { "data": response.data, "key": 'areas' })
-          return response.data
-        }).catch((error) => {
-          console.warn(error)
-        })
-    },
-    async getParkings() {
-        await axios.get(this.state.api + "/parkings/", { params: {token: this.state.user.token, userId: this.state.user.userId } })
-        .then((response) => {
-          this.commit('SET_ADMIN_INFO', {"data": response.data, "key": 'parkings'})
-          return response.data
-        }).catch((error) => {
-          console.warn(error)
-        })
-    },
     async logOut() {
       if (Object.keys(this.state.user).length > 0){
         this.state.user = {}
       } else {
         console.warn("You can't logout, without being logged in")
       }
+    },
+    async addToCart(state, payload) {
+      // Check if product is already in cart
+      let product = this.state.cart.find(product => product.id == payload.id)
+      if(product) {
+        product.quantity += payload.quantity
+      } else {
+        this.state.cart.push(payload)
+      }
+      localStorage.setItem('cart', JSON.stringify(this.state.cart))
+    },
+    async removeFromCart(state, payload) {
+      this.state.cart = this.state.cart.filter(product => product.id != payload.id)
+      localStorage.setItem('cart', JSON.stringify(this.state.cart))
     }
   },
 })

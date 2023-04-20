@@ -26,30 +26,29 @@
                             </div>
 
                         </div>
-                        <button class="ms-lg-0 ms-5 mt-3 float-end btn-transparent btn btn-dark btn-add">-</button>
+                        <button class="ms-lg-0 ms-5 mt-3 float-end btn-transparent btn btn-dark btn-add" @click="this.removeProduct(product)">-</button>
                     </div>
                 </li>
             </ul>
 
-            <div class="d-flex w33 justify-content-between">
-                <h4 class="ms-3 mr-5">Lidl: </h4>
-                <h4><b>45 kr.</b></h4>
-            </div>
-            <div class="d-flex w33 justify-content-between">
-                <h4 class="ms-3 mr-5">Netto:</h4>
-                <h4><b>39 kr.</b></h4>
-            </div>
-            <div class="d-flex w33 justify-content-between">
-                <h4 class="ms-3 mr-5">Rema 1000: </h4>
-                <div class="d-flex">
-                    <h4><b>33 kr.</b></h4>
-                    <div class="cheap-tag">BILLIGST</div>
+            <div class="no-results" v-if="!products.length == 0">
+                <div class="d-flex w33 justify-content-between">
+                    <h4 class="ms-3 mr-5">Lidl: </h4>
+                    <h4><b>45 kr.</b></h4>
+                </div>
+                <div class="d-flex w33 justify-content-between">
+                    <h4 class="ms-3 mr-5">Netto:</h4>
+                    <h4><b>39 kr.</b></h4>
+                </div>
+                <div class="d-flex w33 justify-content-between">
+                    <h4 class="ms-3 mr-5">Rema 1000: </h4>
+                    <div class="d-flex">
+                        <h4><b>33 kr.</b></h4>
+                        <div class="cheap-tag">BILLIGST</div>
+                    </div>
                 </div>
             </div>
-
-            <div class="no-results" v-if="products.length == 0">
-                <p>No products found...</p>
-            </div>
+            <p v-else>No products found...</p>
         </div>
     </div>
 </template>
@@ -61,9 +60,25 @@ export default {
     data() {
         return {
             products: [
-                { name: 'Oksekød', price: 40, stores: [{ name: "Lidl", price: 40 }, { name: "Netto", price: 35 }, { name: "Rema 1000", price: 30 }] }, { name: 'Banan', stores: [{ name: "Lidl", price: 5 }, { name: "Netto", price: 4 }, { name: "Rema 1000", price: 3 }] }
+                // { name: 'Oksekød', price: 40, stores: [{ name: "Lidl", price: 40 }, { name: "Netto", price: 35 }, { name: "Rema 1000", price: 30 }] }, { name: 'Banan', stores: [{ name: "Lidl", price: 5 }, { name: "Netto", price: 4 }, { name: "Rema 1000", price: 3 }] }
             ]
         };
+    },
+    methods: {
+        // Get local storage cart
+        getProducts() {
+            this.products = JSON.parse(localStorage.getItem("cart"));
+        },
+        // Remove product to cart
+        removeProduct(product) {
+            let cart = JSON.parse(localStorage.getItem("cart"));
+            cart = cart.filter((item) => item.name !== product.name);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            this.getProducts();
+        },
+    },
+    mounted() {
+        this.getProducts();
     },
 };
 </script>

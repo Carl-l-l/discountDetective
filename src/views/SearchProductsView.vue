@@ -34,7 +34,7 @@
 
             </div>
             <!-- Add to cart button -->
-            <button class="ms-lg-0 ms-5 mt-3 float-end btn-transparent btn btn-dark btn-add" @click="this.addToCart(product)">+</button>
+            <button class="ms-lg-0 ms-5 mt-3 float-end btn-transparent btn btn-dark btn-add" @click="this.addToCart(products[index])">+</button>
           </div>
         </li>
       </ul>
@@ -54,7 +54,7 @@ export default {
     return {
       searchStr: '',
       products: [
-        { name: 'Oksekød', price: 40, stores: [{name: "Lidl", price: 40}, {name: "Netto", price: 35}, {name: "Rema 1000", price: 30}] }, { name: 'Banan', stores: [{name: "Lidl", price: 5}, {name: "Netto", price: 4}, {name: "Rema 1000", price: 3}] }
+        { name: 'Oksekød', price: 40, quantity: 0, stores: [{name: "Lidl", price: 40}, {name: "Netto", price: 35}, {name: "Rema 1000", price: 30}] }, { name: 'Banan', quantity: 0, stores: [{name: "Lidl", price: 5}, {name: "Netto", price: 4}, {name: "Rema 1000", price: 3}] }
       ]
     };
   },
@@ -68,8 +68,17 @@ export default {
     },
     // add to cart
     addToCart(product) {
-      this.$store.dispatch("addToCart", product);
-      console.log('add to cart', product);
+      let currentCart = this.$store.state.cart;
+      if(currentCart.includes(product)) {
+        console.log('product already in cart')
+        currentCart[currentCart.indexOf(product)].quantity += 1;
+      } else {
+        console.log('product not in cart')
+        product.quantity = 1;
+        currentCart.push(product);
+      }
+      this.$store.dispatch("addToCart", currentCart);
+      console.log(this.$store.state.cart);
     }
   },
   watch: {
@@ -80,7 +89,7 @@ export default {
         this.search(newVal);
       } else {
         this.products = [
-          { name: 'Oksekød', price: 40, stores: [{name: "Lidl", price: 40}, {name: "Netto", price: 35}, {name: "Rema 1000", price: 30}] }, { name: 'Banan', stores: [{name: "Lidl", price: 5}, {name: "Netto", price: 4}, {name: "Rema 1000", price: 3}] }
+          { name: 'Oksekød', price: 40, quantity: 0, stores: [{name: "Lidl", price: 40}, {name: "Netto", price: 35}, {name: "Rema 1000", price: 30}] }, { name: 'Banan', quantity: 0, stores: [{name: "Lidl", price: 5}, {name: "Netto", price: 4}, {name: "Rema 1000", price: 3}] }
         ];
       }
 

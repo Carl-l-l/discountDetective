@@ -48,6 +48,10 @@ export default new Vuex.Store({
     },
     SET_CART(state, cart) {
       state.cart = cart
+    },
+    SET_CART_INFO(state, cart) {
+      state.cart = cart;
+      localStorage.setItem('cart', JSON.stringify(cart))
     }
   },
   actions: {
@@ -61,6 +65,7 @@ export default new Vuex.Store({
       this.commit('SET_SEARCHING', true)
       // console.log("loginUser", payload)
       this.commit('SET_USER_INFO',  {token: 'test', userId: 'test'} )
+      this.commit('SET_CART_INFO', []);
       router.push('/')
 
       // await axios
@@ -147,7 +152,7 @@ export default new Vuex.Store({
       // Check if product is already in cart
       let product = this.state.cart.find(product => product.id == payload.id)
       if(product) {
-        product.quantity += payload.quantity
+        // product.quantity += payload.quantity
       } else {
         this.state.cart.push(payload)
       }

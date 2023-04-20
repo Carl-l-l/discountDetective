@@ -11,7 +11,7 @@
                     <div class="card-body">
 
                         <div class="product-name text-uppercase">
-                            {{ product.name }}
+                            {{ product.name }} - {{ product.quantity }} stk.
                         </div>
                         <div class="price-piece">
 
@@ -32,19 +32,12 @@
             </ul>
 
             <div class="no-results" v-if="!products.length == 0">
-                <div class="d-flex w33 justify-content-between">
-                    <h4 class="ms-3 mr-5">Lidl: </h4>
-                    <h4><b>45 kr.</b></h4>
-                </div>
-                <div class="d-flex w33 justify-content-between">
-                    <h4 class="ms-3 mr-5">Netto:</h4>
-                    <h4><b>39 kr.</b></h4>
-                </div>
-                <div class="d-flex w33 justify-content-between">
-                    <h4 class="ms-3 mr-5">Rema 1000: </h4>
+                <!-- V for each store -->
+                <div v-for="(store, index) in storeTotal" :key="index" class="d-flex justify-content-between">
+                    <h4 class="ms-3">{{ store.name }} </h4>
                     <div class="d-flex">
-                        <h4><b>33 kr.</b></h4>
-                        <div class="cheap-tag">BILLIGST</div>
+                        <h4 v-if="store.name == cheapestStore.name" class="cheap-tag ms-3">BILLIGST</h4>
+                        <h4 class="ms-3"><b>{{ store.price }} kr.</b></h4>
                     </div>
                 </div>
             </div>
@@ -59,9 +52,9 @@ export default {
     components: {},
     data() {
         return {
-            products: [
-                // { name: 'Oksekød', price: 40, stores: [{ name: "Lidl", price: 40 }, { name: "Netto", price: 35 }, { name: "Rema 1000", price: 30 }] }, { name: 'Banan', stores: [{ name: "Lidl", price: 5 }, { name: "Netto", price: 4 }, { name: "Rema 1000", price: 3 }] }
-            ]
+            products: [],
+            storeTotal: [],
+            cheapestStore: "",
         };
     },
     methods: {
@@ -75,10 +68,66 @@ export default {
             cart = cart.filter((item) => item.name !== product.name);
             localStorage.setItem("cart", JSON.stringify(cart));
             this.getProducts();
+            this.getCheapestStore();
+        },
+        getCheapestStore() {
+            // Get cart from local storage
+            let cart = JSON.parse(localStorage.getItem("cart"));
+
+            // Get all stores from cart
+            let storesInCart = cart.map((product) => product.stores);
+
+            // Find all unique stores
+            let uniqueStores = [];
+            storesInCart.forEach((stores) => {
+                stores.forEach((store) => {
+                    if (!uniqueStores.includes(store.name)) {
+                        uniqueStores.push(store.name);
+                    }
+                });
+            });
+            console.log("UniqueStores", uniqueStores);
+
+            // Get all products from each store
+            let productsFromEachStore = [];
+            uniqueStores.forEach((store) => {
+                let products = [];
+                storesInCart.forEach((stores) => {
+                    stores.forEach((storeItem) => {
+                        if (storeItem.name === store) {
+                            products.push(storeItem);
+                        }
+                    });
+                });
+                productsFromEachStore.push(products);
+            });
+            console.log("Products from each store", productsFromEachStore);
+
+            // Find the store prices with store names
+            let storePrices = [];
+            productsFromEachStore.forEach((products) => {
+                let totalPrice = 0;
+                products.forEach((product) => {
+                    totalPrice += product.price;
+                });
+                storePrices.push({
+                    name: products[0].name,
+                    price: totalPrice,
+                });
+            });
+            console.log("Store prices", storePrices)
+            this.storeTotal = storePrices;
+            // Find the cheapest store
+            this.cheapestStore = storePrices.reduce((prev, current) =>
+                prev.price < current.price ? prev : current
+            );
+            console.log("Cheapest store", this.cheapestStore)
+            
         },
     },
     mounted() {
         this.getProducts();
+        this.getCheapestStore();
     },
 };
 </script>
@@ -98,11 +147,6 @@ export default {
     justify-content: center;
     align-items: center;
     display: flex;
-    margin-left: 15px;
-    margin-top: 3px;
-    border-radius: 5px;
-    position: absolute;
-    margin-left: 80px;
 }
 
 .store {

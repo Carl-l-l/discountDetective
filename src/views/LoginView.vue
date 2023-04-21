@@ -15,11 +15,17 @@
           <label for="floatingPassword">Password</label>
         </div>
       </form>
-      <button v-on:click="loginUser()" class="btn-transparent btn btn-dark" :disabled="$store.state.searching == true">Login</button>
+      <div class="d-flex justify-content-between">
+        <button v-on:click="loginUser()" class="btn-transparent btn btn-dark" :disabled="$store.state.searching == true">Login</button>
+        <div class="d-flex gap-2 align-items-center">
+          <font-awesome-icon :icon="['fab', 'facebook']" size="xl"/>
+          <font-awesome-icon :icon="['fab', 'google']" size="xl" />
+        </div>
+      </div>
+      <!-- Searching -->
       <div v-if="$store.state.searching == true" id="searchStatus" class="mt-4 d-flex">
         <span>Searching...</span>
         <div class="loader"></div>
-
       </div>
 
       <router-link class="text-center nav-link text-white" to="/register"><span>Need an account?</span></router-link>
@@ -60,13 +66,12 @@ export default {
     // Check if user is already logged in local storage
     if (localStorage.getItem("user")) {
       this.$store.commit("setUser", JSON.parse(localStorage.getItem("user")));
-      alert("You are already logged in!")
+      alert("You are al ready logged in!")
       this.$router.push("/");
     }
   },
   methods: {
     loginUser: function () {
-      console.log('loginUser')
       this.$store.dispatch("loginUser", {
         params: {
           email: this.form.email,

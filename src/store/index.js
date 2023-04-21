@@ -21,7 +21,7 @@ export default new Vuex.Store({
     api: "",
     user: {},
     secret: "Th1s1s4S3cr3t",
-    cart: []
+    cart: [],
   },
   getters: {
     getAdminInfo: (state) => state.admin,
@@ -45,9 +45,6 @@ export default new Vuex.Store({
     },
     SET_SEARCHING(state, searching) {
       state.searching = searching
-    },
-    SET_CART(state, cart) {
-      state.cart = cart
     },
     SET_CART_INFO(state, cart) {
       state.cart = cart;
@@ -148,19 +145,56 @@ export default new Vuex.Store({
         console.warn("You can't logout, without being logged in")
       }
     },
+    // Add to cart. If the item is already in the cart it will increase the quantity.
     async addToCart(state, payload) {
-      // Check if product is already in cart
-      let product = this.state.cart.find(product => product.id == payload.id)
-      if(product) {
-        // product.quantity += payload.quantity
-      } else {
-        this.state.cart.push(payload)
+
+      // Check if user is logged in
+      if(!this.state.user.token || !this.state.user.userId) {
+        return console.log("No token or userId");
       }
-      localStorage.setItem('cart', JSON.stringify(this.state.cart))
+
+      let cart = this.state.cart;
+
+      // Check if item is already in cart
+      let itemIndex = cart.findIndex(item => item.id == payload.id);
+
+      if(itemIndex == -1) {
+        // Item not in cart
+        payload.quantity = 1;
+        cart.push(payload);
+      } else {
+        // Item is in cart
+        cart[itemIndex].quantity += 1;
+      }
+
+      this.commit('SET_CART_INFO', cart);
     },
+    // Remove from cart. If the item is already in the cart it will decrease the quantity.
     async removeFromCart(state, payload) {
-      this.state.cart = this.state.cart.filter(product => product.id != payload.id)
-      localStorage.setItem('cart', JSON.stringify(this.state.cart))
+        
+        // Check if user is logged in
+        if(!this.state.user.token || !this.state.user.userId) {
+          return console.log("No token or userId");
+        }
+  
+        let cart = this.state.cart;
+  
+        // Check if item is already in cart
+        let itemIndex = cart.findIndex(item => item.id == payload.id);
+  
+        if(itemIndex == -1) {
+          // Item not in cart
+          console.log("Item not in cart")
+        } else {
+          // Item is in cart
+          console.log("Item is in cart", cart[itemIndex].quantity)
+          cart[itemIndex].quantity -= 1;
+          if(cart[itemIndex].quantity <= 0) {
+            cart.splice(itemIndex, 1);
+          }
+        }
+  
+        this.commit('SET_CART_INFO', cart);
     }
   },
 })

@@ -1,6 +1,6 @@
 <template>
     <div class="container mt-5">
-        <h1 class="display-5">Kurv:</h1>
+        <h1 class="display-5">Cart:</h1>
         <div class="card">
             <ul class="list-group">
                 <li class="list-group-item flex-column flex-lg-row" v-for="(product, index) in products"
@@ -11,7 +11,7 @@
                     <div class="card-body">
 
                         <div class="product-name text-uppercase">
-                            {{ product.name }} - {{ product.quantity }} stk.
+                            {{ product.name }} - {{ product.quantity }} pcs.
                         </div>
                         <div class="price-piece">
 
@@ -36,7 +36,7 @@
                 <div v-for="(store, index) in storeTotal" :key="index" class="d-flex justify-content-between">
                     <h4 class="ms-3">{{ store.name }} </h4>
                     <div class="d-flex">
-                        <h4 v-if="store.name == cheapestStore.name" class="cheap-tag ms-3">BILLIGST</h4>
+                        <h4 v-if="store.name == cheapestStore.name" class="cheap-tag ms-3">CHEAPEST</h4>
                         <h4 class="ms-3"><b>{{ store.price }} kr.</b></h4>
                     </div>
                 </div>
@@ -63,67 +63,43 @@ export default {
             this.products = JSON.parse(localStorage.getItem("cart"));
         },
         // Remove product to cart
-        removeProduct(product) {
-            let cart = JSON.parse(localStorage.getItem("cart"));
-            cart = cart.filter((item) => item.name !== product.name);
-            localStorage.setItem("cart", JSON.stringify(cart));
+        async removeProduct(product) {
+            // Call the store function
+            this.$store.dispatch("removeFromCart", product);
             this.getProducts();
             this.getCheapestStore();
         },
+        // Find the cheapest total price, and the store name. Remember there can be multiple of the same product in the cart.
         getCheapestStore() {
-            // Get cart from local storage
-            let cart = JSON.parse(localStorage.getItem("cart"));
+            // Get cart
+            let cart = this.$store.state.cart;
+            this.storeTotal = [];
 
-            // Get all stores from cart
-            let storesInCart = cart.map((product) => product.stores);
+            // if cart is empty, return
+            if (Object.keys(cart) == 0) return;
 
-            // Find all unique stores
-            let uniqueStores = [];
-            storesInCart.forEach((stores) => {
-                stores.forEach((store) => {
-                    if (!uniqueStores.includes(store.name)) {
-                        uniqueStores.push(store.name);
+            // Loop through all the products, then get the quality and price of each store
+            cart.forEach((product) => {
+                product.stores.forEach((store) => {
+                    // Check if the store is already in the array
+                    let storeIndex = this.storeTotal.findIndex((x) => x.name == store.name);
+                    // If the store is not in the array, add it
+                    if (storeIndex == -1) {
+                        this.storeTotal.push({
+                            name: store.name,
+                            price: store.price * product.quantity,
+                        });
+                    } else {
+                        // If the store is in the array, add the price to the existing price
+                        this.storeTotal[storeIndex].price += store.price * product.quantity;
                     }
                 });
             });
-            console.log("UniqueStores", uniqueStores);
-
-            // Get all products from each store
-            let productsFromEachStore = [];
-            uniqueStores.forEach((store) => {
-                let products = [];
-                storesInCart.forEach((stores) => {
-                    stores.forEach((storeItem) => {
-                        if (storeItem.name === store) {
-                            products.push(storeItem);
-                        }
-                    });
-                });
-                productsFromEachStore.push(products);
-            });
-            console.log("Products from each store", productsFromEachStore);
-
-            // Find the store prices with store names
-            let storePrices = [];
-            productsFromEachStore.forEach((products) => {
-                let totalPrice = 0;
-                products.forEach((product) => {
-                    totalPrice += product.price;
-                });
-                storePrices.push({
-                    name: products[0].name,
-                    price: totalPrice,
-                });
-            });
-            console.log("Store prices", storePrices)
-            this.storeTotal = storePrices;
-            // Find the cheapest store
-            this.cheapestStore = storePrices.reduce((prev, current) =>
+            // Set the cheapest store
+            this.cheapestStore = this.storeTotal.reduce((prev, current) =>
                 prev.price < current.price ? prev : current
             );
-            console.log("Cheapest store", this.cheapestStore)
-            
-        },
+        }
     },
     mounted() {
         this.getProducts();

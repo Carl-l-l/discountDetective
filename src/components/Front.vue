@@ -19,10 +19,12 @@
           </div>
         </div>
 
-        <h5 class="lead mt-5">Register as a user</h5>
-        <div class="d-flex justify-content-center">
-          <button @click="$router.push('login')" id="loginBtn" class="btn btn-dark btn-lg mr-4">Login</button>
-          <button @click="$router.push('register')" class="btn btn-dark btn-lg ml-5">Register</button>
+        <div v-if="!this.$store.state.user.hasOwnProperty('userId')">
+          <h5 class="lead mt-5">Register as a user</h5>
+          <div class="d-flex justify-content-center">
+            <button @click="$router.push('login')" id="loginBtn" class="btn btn-dark btn-lg mr-4">Login</button>
+            <button @click="$router.push('register')" class="btn btn-dark btn-lg ml-5">Register</button>
+          </div>
         </div>
 
 

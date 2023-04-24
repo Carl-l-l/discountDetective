@@ -8,6 +8,9 @@ import "bootstrap";
 /* ServiceWorker for PWA */
 import './registerServiceWorker';
 
+/* Import chart.js */
+import { ChartComp } from 'chart.js';
+
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
 
@@ -23,4 +26,5 @@ library.add(faPlus, faEdit, faFacebook, faGoogle )
 
 let app = createApp(App)
 app.component('font-awesome-icon', FontAwesomeIcon)
+app.component('ChartComp', ChartComp)
 app.use(store).use(router).mount('#app')

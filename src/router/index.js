@@ -5,6 +5,7 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import SearchProductsView from '../views/SearchProductsView.vue'
 import CartView from '../views/CartView.vue'
+import ProductView from '../views/ProductView.vue'
 import store from '../store/index.js'
 
 function isLoggedIn() {
@@ -58,6 +59,10 @@ const routes = [
     path: "/cart",
     component: CartView,
     beforeEnter: [isLoggedIn]
+  },
+  {
+    path: "/product",
+    component: ProductView,
   },
   {
     path: "/:catchAll(.*)",

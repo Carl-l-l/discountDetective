@@ -10,18 +10,16 @@
 
     <div class="card">
       <ul class="list-group">
-        <li class="list-group-item flex-column flex-lg-row "
-          v-for="(product, index) in products" :key="index">
+        <li class="list-group-item flex-column flex-lg-row " v-for="(product, index) in     products    " :key="index">
           <div class="card-img">
             <img src="https://picsum.photos/300/300" class="img-fluid" alt="product image">
           </div>
           <div class="card-body">
 
             <div class="product-name text-uppercase">
-              {{ product.name }}
+              {{ product.name}}
             </div>
             <div class="price-piece">
-
               <!-- List all stores name and price -->
               <div class="store" v-for="(store, index) in product.stores" :key="index">
                 <div class="store-name ">
@@ -30,27 +28,33 @@
                 <div class="store-price">
                   {{ store.price }},-
                 </div>
-                </div>
+              </div>
 
             </div>
             <!-- Add to cart button -->
-            <button class="ms-lg-0 ms-5 mt-3 float-end btn-transparent btn btn-dark btn-add" @click="this.addToCart(products[index]); this.active = true;">+</button>
+            <RouterLink class="mt-3 btn btn-dark" to="/product">View More</RouterLink>
+
+            <button class="ms-lg-0 ms-5 mt-3 float-end btn-transparent btn btn-dark btn-add"
+              @click="this.addToCart(products[index]); this.active = true;">+</button>
           </div>
         </li>
       </ul>
 
-      <div class="no-results" v-if="products.length == 0">
+      <div class="no-results" v-if=" products.length == 0 ">
         <p>No products found...</p>
       </div>
     </div>
   </div>
-  
+
   <!-- Pop-up on addToCart -->
-  <div class="alert alert-success hide" v-bind:class="active == true ? animate : hide" role="alert">
+  <div v-if=" this.$store.state.user.hasOwnProperty('userId') " class="alert alert-success hide"
+    :class=" { 'animate': active } " role="alert">
     Added to cart!
   </div>
-
-
+  <div v-if=" !this.$store.state.user.hasOwnProperty('userId') " class="alert alert-danger hide"
+    :class=" { 'animate': active } " role="alert">
+    Please login to add to cart!
+  </div>
 </template>
 
 <script>
@@ -61,10 +65,10 @@ export default {
     return {
       searchStr: '',
       products: [
-        { id: 1, name: 'Beef', stores: [{name: "Lidl", price: 40}, {name: "Netto", price: 35}, {name: "Rema 1000", price: 30}] }, 
-        { id: 2, name: 'Banana', stores: [{name: "Lidl", price: 5}, {name: "Netto", price: 4}, {name: "Rema 1000", price: 6}] }
+        { id: 1, name: 'Beef', stores: [{ name: "Lidl", price: 40 }, { name: "Netto", price: 35 }, { name: "Rema 1000", price: 30 }] },
+        { id: 2, name: 'Banana', stores: [{ name: "Lidl", price: 5 }, { name: "Netto", price: 4 }, { name: "Rema 1000", price: 6 }] }
       ],
-      active: true,
+      active: false,
     };
   },
   methods: {
@@ -78,14 +82,16 @@ export default {
     // add to cart
     addToCart(product) {
       // Apply animation
+      this.active = false
+
       this.active = true;
 
       this.$store.dispatch("addToCart", product);
 
       // Remove animation after 5 seconds
       setTimeout(() => {
-        this.active = false;
-      }, 5000);
+        this.active = false
+      }, 5000)
     }
   },
   watch: {
@@ -96,40 +102,61 @@ export default {
         this.search(newVal);
       } else {
         this.products = [
-          { id: 1, name: 'Beef', stores: [{name: "Lidl", price: 40}, {name: "Netto", price: 35}, {name: "Rema 1000", price: 30}] }, 
-          { id: 2, name: 'Banana', stores: [{name: "Lidl", price: 5}, {name: "Netto", price: 4}, {name: "Rema 1000", price: 6}] }
+          { id: 1, name: 'Beef', stores: [{ name: "Lidl", price: 40 }, { name: "Netto", price: 35 }, { name: "Rema 1000", price: 30 }] },
+          { id: 2, name: 'Banana', stores: [{ name: "Lidl", price: 5 }, { name: "Netto", price: 4 }, { name: "Rema 1000", price: 6 }] }
         ];
       }
     }
-  }
+  },
+  mounted() {
+    /* Check for url query */
+    if (this.$route.query.search) {
+      this.searchStr = this.$route.query.search;
+      this.search(this.searchStr);
+    }
+  },
 };
 </script>
 
 <style scoped>
-    .hide {
-      -webkit-transform: scale(0%);
-    }
-    .alert-success {
-      min-width: 350px;
-      width: 75%;
-      position: fixed;
-      bottom: 0;
-      right: 20px;
-      /* transition: 2s ease-in; */
-    }
+.hide {
+  -webkit-transform: scale(0%);
+}
 
-    .animate {
-      animation: moveOpen 5s;
-    }
+.alert {
+  min-width: 350px;
+  width: 75%;
+  position: fixed;
+  bottom: 0;
+  right: 20px;
+  /* transition: 2s ease-in; */
+}
 
-    /* Alert animation */
-  @keyframes moveOpen 
-	{
-  from {-webkit-transform: scale(0%);}
-  10% {-webkit-transform: scale(100%);}
-  50% {-webkit-transform: scale(100%);}
-  90% {-webkit-transform: scale(100%);}
-  to {-webkit-transform: scale(0%);}
+.animate {
+  animation: moveOpen 5s;
+}
+
+/* Alert animation */
+@keyframes moveOpen {
+  from {
+    -webkit-transform: scale(0%);
+  }
+
+  10% {
+    -webkit-transform: scale(100%);
+  }
+
+  50% {
+    -webkit-transform: scale(100%);
+  }
+
+  90% {
+    -webkit-transform: scale(100%);
+  }
+
+  to {
+    -webkit-transform: scale(0%);
+  }
 }
 
 .store {
@@ -137,6 +164,7 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
+
 .product-name {
   font-size: 1.2rem;
   font-weight: bold;

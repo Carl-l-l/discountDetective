@@ -13,14 +13,14 @@
           <a @click="$router.push('about')" class="btn btn-dark btn-sm">Learn more</a>
         </p>
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Search for product" aria-label="Search for product" aria-describedby="button-addon2">
+          <input type="text" class="form-control" placeholder="Search for product" aria-label="Search for product" aria-describedby="button-addon2" v-model="searchStr">
           <div class="input-group-append">
-            <button class="btn btn-search" type="button" id="button-addon2">🔍</button>
+            <button @click="this.search" class="btn btn-search" type="button" id="button-addon2">🔍</button>
           </div>
         </div>
 
         <div v-if="!this.$store.state.user.hasOwnProperty('userId')">
-          <h5 class="lead mt-5">Register as a user</h5>
+          <h5 class="lead mt-5">Register as a user to start!</h5>
           <div class="d-flex justify-content-center">
             <button @click="$router.push('login')" id="loginBtn" class="btn btn-dark btn-lg mr-4">Login</button>
             <button @click="$router.push('register')" class="btn btn-dark btn-lg ml-5">Register</button>
@@ -39,6 +39,17 @@
 <script>
 export default {
   name: "FrontPage",
+  data() {
+    return {
+      searchStr: "",
+    };
+  },
+  methods: {
+    // Router push with query as searchStr
+    search() {
+      this.$router.push("/search-products?search=" + this.searchStr);
+    },
+  },
 };
 </script>
 

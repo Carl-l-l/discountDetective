@@ -30,7 +30,7 @@
 
       </div>
       <div class="col-lg-2 mt-5 ml-5 text-center">
-        <img class="img-fluid" src="../assets/discount.png" alt="Discount Detective" width="200" />
+        <img class="img-fluid" src="../assets/discount.webp" alt="Discount Detective" width="200" />
       </div>
     </div>
   </div>

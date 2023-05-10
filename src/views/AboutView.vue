@@ -43,25 +43,25 @@
           <div class="row contact-us">
             <h4 class="">Phone:</h4>
             <div class="col-lg-12 contact-row">
-              <img width="50" height="50" src="../assets/Phone.png" alt="Phone" />
+              <img width="50" height="50" src="../assets/Phone.webp" alt="Phone" />
               <p>+45 12 34 56 78</p>
             </div>
             <hr class="mt-4" />
             <h4 class="">Mail:</h4>
             <div class="col-lg-12 contact-row">
-              <img width="50" height="50" src="../assets/Mail.png" alt="Mail" />
+              <img width="50" height="50" src="../assets/Mail.webp" alt="Mail" />
               <p>support@dd.dk</p>
             </div>
             <hr class="mt-4" />
             <h4 class="">Location:</h4>
             <div class="col-lg-12 contact-row">
-              <img width="50" height="50" src="../assets/Location.png" alt="Location" />
+              <img width="50" height="50" src="../assets/Location.webp" alt="Location" />
               <p>Vikærsvej 46, 2. th 8240 Risskov</p>
             </div>
             <hr class="mt-4" />
             <h4 class="">Livechat:</h4>
             <div class="col-lg-12 contact-row">
-              <img width="50" height="50" src="../assets/Livechat.png" alt="Livechat" />
+              <img width="50" height="50" src="../assets/Livechat.webp" alt="Livechat" />
               <p>Livechat funktion på vej!</p>
             </div>
           </div>

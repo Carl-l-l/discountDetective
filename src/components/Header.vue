@@ -5,7 +5,7 @@
         <router-link class="navbar-brand d-lg-none fw-bold text-white" to="/login">Login</router-link>
       </div>
       <router-link class="navbar-brand fw-bold text-white" to="/">
-        <img src="../assets/dd_logo.jpeg" height="35" width="35" alt="DiscountDetective LOGO" style="border-radius: 5px;" />
+        <img src="../assets/dd_logo.webp" height="35" width="35" alt="DiscountDetective LOGO" style="border-radius: 5px;" />
         DISCOUNT<span class="text-secondary fw-bold">DETECTIVE</span>
       </router-link>
       <button type="button" id="navbarBtn" aria-label="Navbar button" class="navbar-toggler on-top"
